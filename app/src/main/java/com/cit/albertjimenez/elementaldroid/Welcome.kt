@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import com.cit.albertjimenez.elementaldroid.dao.Element
+import com.cit.albertjimenez.elementaldroid.dao.RegularUser
+import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerFB
 import com.cit.albertjimenez.elementaldroid.utils.auth
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -19,13 +22,13 @@ class Welcome : AppCompatActivity() {
 
     private val RC_SIGN_IN = 9001
     private var mAuth: FirebaseAuth? = null
+    private val dataManagerFB: DataManagerFB = DataManagerFB()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         mAuth = FirebaseAuth.getInstance()
-
 
         // Lambda for avoid repeating code
         val animation = { AnimationUtils.loadAnimation(applicationContext, R.anim.bounce) }
@@ -65,6 +68,8 @@ class Welcome : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         val user = mAuth?.currentUser
                         Toast.makeText(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
+                        dataManagerFB.storeNewUser(RegularUser(user!!.displayName!!,
+                                user.email!!, ArrayList<Element>()))
                     } else
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
 
