@@ -64,8 +64,7 @@ class Welcome : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = mAuth?.currentUser
-                        Toast.makeText(this,"Welcome "+ user?.displayName, Toast.LENGTH_SHORT).show()
-
+                        Toast.makeText(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
                     } else
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
 
