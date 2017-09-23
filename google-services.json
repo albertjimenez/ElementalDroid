@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "157594615440",
+    "firebase_url": "https://elementaldroid-46a02.firebaseio.com",
+    "project_id": "elementaldroid-46a02",
+    "storage_bucket": "elementaldroid-46a02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157594615440:android:7128676f3283528d",
+        "android_client_info": {
+          "package_name": "com.cit.albertjimenez.elementaldroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157594615440-if7o60j28brvam8fea8agat7fcdnov22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cit.albertjimenez.elementaldroid",
+            "certificate_hash": "9213ae0520917ce4f114d103fa8fee64da2cce3d"
+          }
+        },
+        {
+          "client_id": "157594615440-a2v4ut9r47ja8e624m88lv2ojkp88vbh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPQPzKf5VxGaDA6W8aC3FvooXG5S62sdc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157594615440-a2v4ut9r47ja8e624m88lv2ojkp88vbh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

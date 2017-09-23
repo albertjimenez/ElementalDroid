@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cit.albertjimenez.elementaldroid.Welcome">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
+            style="@style/AppTheme.PopupOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="#FFFFFFFF"
+                android:elevation="8dp"
+                android:fontFamily="@font/lobster"
+                android:text="@string/welcome"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </android.support.design.widget.AppBarLayout>
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="221dp"
+            android:layout_height="172dp"
+            app:srcCompat="@drawable/welcome"
+
+            />
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="100dp"/>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
