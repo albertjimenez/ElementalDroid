@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import com.cit.albertjimenez.elementaldroid.dao.Element
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerFB
 import com.cit.albertjimenez.elementaldroid.utils.auth
@@ -15,7 +15,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_welcome.*
+import java.util.*
 
 
 class Welcome : AppCompatActivity() {
@@ -29,17 +31,32 @@ class Welcome : AppCompatActivity() {
         setContentView(R.layout.activity_welcome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         mAuth = FirebaseAuth.getInstance()
+        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.move))
 
         // Lambda for avoid repeating code
-        val animation = { AnimationUtils.loadAnimation(applicationContext, R.anim.bounce) }
-        logo.startAnimation(animation.invoke())
-        logo.setOnClickListener { animation.invoke() }
+        logo.setOnClickListener { logoInteraction() }
         val mGoogleApiClient = auth(context = this, fragment = FragmentActivity(),
                 token = getString(R.string.token))
         sign_in_button.setOnClickListener { signIn(mGoogleApiClient = mGoogleApiClient) }
+        progressBar.visibility = View.GONE
+        dataManagerFB.initFB()
+
     }
 
+    private fun logoInteraction() {
+        val animationList: ArrayList<Int> = arrayListOf(R.anim.blink, R.anim.bounce,
+                R.anim.fade_in, R.anim.fade_out, R.anim.move, R.anim.rotate, R.anim.slide_down,
+                R.anim.slide_up, R.anim.zoom_in, R.anim.zoom_out)
+        logo.startAnimation(AnimationUtils.loadAnimation(this, animationList[(0..animationList.size).random()]))
+
+    }
+
+    //One line function for generate random number from a Range (Extension)
+    fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
+
+
     private fun signIn(mGoogleApiClient: GoogleApiClient) {
+        progressBar.visibility = View.VISIBLE
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         startActivityForResult(signInIntent, RC_SIGN_IN)
 
@@ -55,21 +72,21 @@ class Welcome : AppCompatActivity() {
                 val account = result.signInAccount
                 firebaseAuthWithGoogle(account!!)
             }
-        }
+        } else progressBar.visibility = View.GONE
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
 
-
+        progressBar.visibility = View.GONE
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         mAuth?.signInWithCredential(credential)
                 ?.addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = mAuth?.currentUser
-                        Toast.makeText(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
+                        Toasty.success(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
                         dataManagerFB.storeNewUser(RegularUser(user!!.displayName!!,
-                                user.email!!, ArrayList<Element>()))
+                                user.email!!, ArrayList()))
                     } else
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
 

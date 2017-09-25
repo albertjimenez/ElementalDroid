@@ -40,13 +40,20 @@
             android:layout_width="221dp"
             android:layout_height="172dp"
             app:srcCompat="@drawable/welcome"
-
-            />
+            android:contentDescription="@string/conten_image_description" />
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="100dp"/>
+            android:paddingTop="100dp">
+
+        </com.google.android.gms.common.SignInButton>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
