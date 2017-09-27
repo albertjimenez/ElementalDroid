@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser
+import com.cit.albertjimenez.elementaldroid.dao.TeacherUser
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.utils.auth
 import com.google.android.gms.auth.api.Auth
@@ -39,6 +40,7 @@ class Welcome : AppCompatActivity() {
         sign_in_button.setOnClickListener { signIn(mGoogleApiClient = mGoogleApiClient) }
         progressBar.visibility = View.GONE
         dataManagerFB.initFB()
+
 
     }
 
@@ -86,7 +88,12 @@ class Welcome : AppCompatActivity() {
                         Toasty.success(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
                         val regularUser = RegularUser(user!!.displayName, user.email)
                         dataManagerFB.storeNewUser(regularUser)
-                        startActivity(Intent(this, ListElements::class.java))
+                        val myIntent = Intent(this, ListElements::class.java)
+                        myIntent.putExtra("PROFILEPHOTO", user.photoUrl?.toString())
+                        myIntent.putExtra("PROFILEUSERNAME", user.displayName)
+                        if (dataManagerFB.isTeacher(TeacherUser(user.displayName, user.email)))
+                            Toasty.success(this, "Hi lecturer " + user.displayName).show()
+                        startActivity(Intent(myIntent))
                     } else
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
 
