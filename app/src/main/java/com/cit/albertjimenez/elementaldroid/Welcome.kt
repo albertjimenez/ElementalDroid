@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -25,12 +26,14 @@ class Welcome : AppCompatActivity() {
 
     private val RC_SIGN_IN = 9001
     private var mAuth: FirebaseAuth? = null
-    private val dataManagerFB = DataManagerJ()
+    private val dataManagerFB = DataManagerJ.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        dataManagerFB.initFB()
         mAuth = FirebaseAuth.getInstance()
+
         logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.move))
 
         // Lambda for avoid repeating code
@@ -39,7 +42,6 @@ class Welcome : AppCompatActivity() {
                 token = getString(R.string.token))
         sign_in_button.setOnClickListener { signIn(mGoogleApiClient = mGoogleApiClient) }
         progressBar.visibility = View.GONE
-        dataManagerFB.initFB()
 
 
     }
@@ -86,13 +88,15 @@ class Welcome : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         val user = mAuth?.currentUser
                         Toasty.success(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
-                        val regularUser = RegularUser(user!!.displayName, user.email)
+                        val regularUser = RegularUser(user!!.displayName!!, user.email!!)
                         dataManagerFB.storeNewUser(regularUser)
                         val myIntent = Intent(this, ListElements::class.java)
                         myIntent.putExtra("PROFILEPHOTO", user.photoUrl?.toString())
                         myIntent.putExtra("PROFILEUSERNAME", user.displayName)
-                        if (dataManagerFB.isTeacher(TeacherUser(user.displayName, user.email)))
-                            Toasty.success(this, "Hi lecturer " + user.displayName).show()
+                        Log.d("ELEMENTS: ", dataManagerFB.elementHashSet.toString())
+                        if (dataManagerFB.isTeacher(TeacherUser(user.displayName!!, user.email!!)))
+                            startActivity(Intent(this, TeacherActivity::class.java))
+                        else
                         startActivity(Intent(myIntent))
                     } else
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()

@@ -5,4 +5,7 @@
     <string name="token">157594615440-a2v4ut9r47ja8e624m88lv2ojkp88vbh.apps.googleusercontent.com</string>
     <string name="conten_image_description">Logo image</string>
     <string name="profile_user_image_content">Profile User Image</string>
+    <string name="title_activity_teacher">TeacherActivity</string>
+    <string name="no_string_captured">No string captured</string>
+    <string name="scan_qr_code">Scan QR Code</string>
 </resources>
