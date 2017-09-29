@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -33,6 +32,7 @@ class Welcome : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         dataManagerFB.initFB()
         mAuth = FirebaseAuth.getInstance()
+
 
         logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.move))
 
@@ -90,10 +90,12 @@ class Welcome : AppCompatActivity() {
                         Toasty.success(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
                         val regularUser = RegularUser(user!!.displayName!!, user.email!!)
                         dataManagerFB.storeNewUser(regularUser)
-                        val myIntent = Intent(this, ListElements::class.java)
-                        myIntent.putExtra("PROFILEPHOTO", user.photoUrl?.toString())
-                        myIntent.putExtra("PROFILEUSERNAME", user.displayName)
-                        Log.d("ELEMENTS: ", dataManagerFB.elementHashSet.toString())
+                        val myIntent = with(Intent(this, ListElements::class.java)) {
+                            putExtra("PROFILEPHOTO", user.photoUrl?.toString())
+                            putExtra("PROFILEUSERNAME", user.displayName)
+                            putExtra("PROFILEEMAIL", user.email)
+                        }
+                        dataManagerFB.discoverElement()
                         if (dataManagerFB.isTeacher(TeacherUser(user.displayName!!, user.email!!)))
                             startActivity(Intent(this, TeacherActivity::class.java))
                         else

@@ -8,4 +8,5 @@
     <string name="title_activity_teacher">TeacherActivity</string>
     <string name="no_string_captured">No string captured</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="elements_found">Elements found:</string>
 </resources>

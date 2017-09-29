@@ -73,7 +73,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.barcode_capture);
-
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
 
         boolean autoFocus = true;

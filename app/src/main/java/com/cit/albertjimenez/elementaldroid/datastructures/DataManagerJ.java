@@ -1,5 +1,7 @@
 package com.cit.albertjimenez.elementaldroid.datastructures;
 
+import android.util.Log;
+
 import com.cit.albertjimenez.elementaldroid.dao.Element;
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser;
 import com.cit.albertjimenez.elementaldroid.dao.TeacherUser;
@@ -11,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * Created by Albert Jiménez on 25/9/17 for Programming Mobile Devices.
@@ -50,12 +53,27 @@ public class DataManagerJ implements Serializable {
     }
 
     public static DataManagerJ getInstance() {
-        return dataManagerJ == null ? new DataManagerJ() : dataManagerJ;
+        if (dataManagerJ == null)
+            dataManagerJ = new DataManagerJ();
+        return dataManagerJ;
     }
 
     public void storeNewElement(Element element) {
         if (elementHashSet.add(element))
-            myRefElements.push().setValue(element);
+            myRefElements.child(element.getName().toLowerCase()).setValue(element);
+
+
+    }
+
+    public void discoverElement() {
+        for (RegularUser r : users) {
+            Log.d("ELEMENTS", r.toString());
+            if (r.getEmail().equals("al286423@uji.es")) {
+                r.getDiscoveredElements().add(new Element("Plutonio", "-", "vaya"));
+
+            }
+        }
+        Log.d("ELEMENTS after", users.toString());
 
     }
 
@@ -69,13 +87,22 @@ public class DataManagerJ implements Serializable {
 
     }
 
+    public LinkedList<Element> retrieveElementsByUser(String email) {
+        for (RegularUser r : users) {
+            if (r.getEmail().equals(email)) {
+                return r.getDiscoveredElements();
+            }
+        }
+        return new LinkedList<>();
+    }
 
     public void initFB() {
         myRefUsers.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 RegularUser user = dataSnapshot.getValue(RegularUser.class);
-                if (!users.contains(user)) users.add(user);
+                users.add(user);
+
             }
 
             @Override

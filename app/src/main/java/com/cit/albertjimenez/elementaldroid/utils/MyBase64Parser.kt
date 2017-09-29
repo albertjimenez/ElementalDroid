@@ -21,3 +21,7 @@ fun decodeImage(string: String): Bitmap {
     return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
 }
+
+fun String.initialLetter(): String {
+    return this[0].toString()
+}
