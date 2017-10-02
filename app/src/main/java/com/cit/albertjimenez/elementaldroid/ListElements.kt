@@ -30,7 +30,7 @@ class ListElements : AppCompatActivity() {
             setHasFixedSize(true)
             val list = dataManagerFB.
                     retrieveElementsByUser(intent.getStringExtra("PROFILEEMAIL"))
-            Log.d("ELEMENTS on LIst", list.toString())
+            Log.d("ELEMENTS on List", list.toString())
             adapter = ReciclerAdapter(list)
         }
 

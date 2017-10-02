@@ -22,6 +22,3 @@ fun decodeImage(string: String): Bitmap {
 
 }
 
-fun String.initialLetter(): String {
-    return this[0].toString()
-}

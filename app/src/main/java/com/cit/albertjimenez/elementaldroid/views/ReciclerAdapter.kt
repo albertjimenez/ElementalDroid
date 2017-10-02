@@ -21,9 +21,9 @@ class ReciclerAdapter(val names: MutableList<Element>) : RecyclerView.Adapter<Re
     var generator = ColorGenerator.MATERIAL
     override fun onBindViewHolder(holder: MyViewHolder?, position: Int) {
         holder!!.title.text = names[position].name
-        holder!!.subtitle.text = names[position].description
-        holder!!.view.setOnClickListener { Log.d("ELEMENT", "clicked " + position) }
-        holder!!.letterMaterial.setImageDrawable(TextDrawable.builder()
+        holder.subtitle.text = names[position].description
+        holder.view.setOnClickListener { Log.d("ELEMENT", "clicked " + position) }
+        holder.letterMaterial.setImageDrawable(TextDrawable.builder()
                 .buildRoundRect(names[position].name.initialLetter(), generator.randomColor, 10))
 
 

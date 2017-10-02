@@ -6,6 +6,6 @@ package com.cit.albertjimenez.elementaldroid.dao
 data class Element(val name: String = "", val photoBase64: String = "", val description: String = "") {
     override fun equals(other: Any?): Boolean {
         val aux: Element = other as Element
-        return other.name.toLowerCase() == this.name.toLowerCase()
+        return aux.name.toLowerCase() == this.name.toLowerCase()
     }
 }

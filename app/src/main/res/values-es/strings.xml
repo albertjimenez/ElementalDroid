@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Elemental Droid</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="conten_image_description">"Imagen "</string>
+    <string name="profile_user_image_content">Imagen de perfil</string>
+    <string name="no_string_captured">No se ha capturado ningún dato</string>
+    <string name="scan_qr_code">Escanea el código QR</string>
+    <string name="elements_found">Elementos encontrados:</string>
+</resources>

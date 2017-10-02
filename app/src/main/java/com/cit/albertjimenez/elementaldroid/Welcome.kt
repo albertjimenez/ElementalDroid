@@ -11,12 +11,12 @@ import com.cit.albertjimenez.elementaldroid.dao.RegularUser
 import com.cit.albertjimenez.elementaldroid.dao.TeacherUser
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.utils.auth
+import com.cit.albertjimenez.elementaldroid.utils.random
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_welcome.*
 import java.util.*
 
@@ -55,7 +55,6 @@ class Welcome : AppCompatActivity() {
     }
 
     //One line function for generate random number from a Range (Extension)
-    fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
 
 
     private fun signIn(mGoogleApiClient: GoogleApiClient) {
@@ -87,7 +86,6 @@ class Welcome : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = mAuth?.currentUser
-                        Toasty.success(this, "Welcome " + user?.displayName, Toast.LENGTH_SHORT).show()
                         val regularUser = RegularUser(user!!.displayName!!, user.email!!)
                         dataManagerFB.storeNewUser(regularUser)
                         val myIntent = with(Intent(this, ListElements::class.java)) {

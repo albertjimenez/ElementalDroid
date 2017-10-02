@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
-import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 
 class TeacherActivity : AppCompatActivity() {
 
@@ -19,7 +18,7 @@ class TeacherActivity : AppCompatActivity() {
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener { view -> Snackbar.make(view, "Not implemented yet", Toast.LENGTH_SHORT) }
         //Data manager
-        val dataManagerFB = DataManagerJ.getInstance()
+//        val dataManagerFB = DataManagerJ.getInstance()
         //        ImageView imageView = findViewById(R.id.pluton);
         //        Log.d("BASE64", MyBase64ParserKt.encodeImage(((BitmapDrawable)imageView.getDrawable()).getBitmap()));
 
