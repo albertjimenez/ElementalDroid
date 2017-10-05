@@ -19,6 +19,7 @@ class ListElements : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        dataManagerFB.discoverElements()
         setContentView(R.layout.activity_list_elements)
         supportActionBar?.title = intent.getStringExtra("PROFILEUSERNAME")
         //initialize ImageView

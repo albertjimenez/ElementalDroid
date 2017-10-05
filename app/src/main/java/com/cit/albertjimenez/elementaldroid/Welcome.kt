@@ -93,7 +93,6 @@ class Welcome : AppCompatActivity() {
                             putExtra("PROFILEUSERNAME", user.displayName)
                             putExtra("PROFILEEMAIL", user.email)
                         }
-                        dataManagerFB.discoverElement()
                         if (dataManagerFB.isTeacher(TeacherUser(user.displayName!!, user.email!!)))
                             startActivity(Intent(this, TeacherActivity::class.java))
                         else

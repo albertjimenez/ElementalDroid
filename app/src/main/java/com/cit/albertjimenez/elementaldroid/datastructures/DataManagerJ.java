@@ -1,7 +1,5 @@
 package com.cit.albertjimenez.elementaldroid.datastructures;
 
-import android.util.Log;
-
 import com.cit.albertjimenez.elementaldroid.dao.Element;
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser;
 import com.cit.albertjimenez.elementaldroid.dao.TeacherUser;
@@ -22,18 +20,14 @@ import java.util.LinkedList;
 public class DataManagerJ implements Serializable {
     static {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
     }
 
     private static DataManagerJ dataManagerJ = null;
 
     private HashSet<RegularUser> users;  //Every profile with their own discoveries
     private HashSet<Element> elementHashSet; // All the elements present
-    private HashSet<TeacherUser> teacherUsers;
+    private HashSet<TeacherUser> teacherUsers; // ATM just one teacher
 
-    public HashSet<Element> getElementHashSet() {
-        return elementHashSet;
-    }
 
     //Endpoints
     public static final String profilesURL = "profile";
@@ -62,19 +56,17 @@ public class DataManagerJ implements Serializable {
         if (elementHashSet.add(element))
             myRefElements.child(element.getName().toLowerCase()).setValue(element);
 
-
     }
 
-    public void discoverElement() {
+    public void discoverElements() {
         for (RegularUser r : users) {
-            Log.d("ELEMENTS", r.toString());
             if (r.getEmail().equals("al286423@uji.es")) {
-                r.getDiscoveredElements().add(new Element("Plutonio", "-", "vaya"));
+                r.getDiscoveredElements().add(new Element("Caca", "Pene", "---"));
+                r.getDiscoveredElements().add(new Element("Caca2", "Pene", "---"));
+                r.getDiscoveredElements().add(new Element("Caca3", "Pene", "---"));
 
             }
         }
-        Log.d("ELEMENTS after", users.toString());
-
     }
 
     public boolean isTeacher(TeacherUser teacherUser) {
@@ -83,9 +75,10 @@ public class DataManagerJ implements Serializable {
 
     public void storeNewUser(RegularUser user) {
         if (users.add(user))
-            myRefUsers.push().setValue(user);
+            myRefUsers.child(replaceDots(user.getEmail())).setValue(user);
 
     }
+
 
     public LinkedList<Element> retrieveElementsByUser(String email) {
         for (RegularUser r : users) {
@@ -180,5 +173,9 @@ public class DataManagerJ implements Serializable {
 
             }
         });
+    }
+
+    private String replaceDots(String str) {
+        return str.replace(".", "@");
     }
 }
