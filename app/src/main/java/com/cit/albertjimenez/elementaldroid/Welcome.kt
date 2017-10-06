@@ -1,6 +1,7 @@
 package com.cit.albertjimenez.elementaldroid
 
 import android.content.Intent
+import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
@@ -32,7 +33,7 @@ class Welcome : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         dataManagerFB.initFB()
         mAuth = FirebaseAuth.getInstance()
-
+        HttpResponseCache.install(cacheDir, 100000L)
 
         logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.move))
 
@@ -96,7 +97,7 @@ class Welcome : AppCompatActivity() {
                         if (dataManagerFB.isTeacher(TeacherUser(user.displayName!!, user.email!!)))
                             startActivity(Intent(this, TeacherActivity::class.java))
                         else
-                        startActivity(Intent(myIntent))
+                            startActivity(Intent(myIntent))
                     } else
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
 
