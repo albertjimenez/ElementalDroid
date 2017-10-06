@@ -80,7 +80,7 @@ public class CameraSource {
     private static final String TAG = "OpenCameraSource";
 
     /**
-     * The dummy surface texture must be assigned a chosen name.  Since we never use an OpenGL
+     * The dummy surface texture must be assigned a chosen title.  Since we never use an OpenGL
      * context, we can choose any ID we want here.
      */
     private static final int DUMMY_TEXTURE_NAME = 100;

@@ -3,9 +3,13 @@ package com.cit.albertjimenez.elementaldroid.dao
 /**
  * Created by Albert Jiménez on 23/9/17 for Programming Mobile Devices.
  */
-data class Element(val name: String = "", val photoBase64: String = "", val description: String = "") {
+data class Element(var title: String = "", var original: String = "", var extract: String = "") : Comparable<Element> {
     override fun equals(other: Any?): Boolean {
         val aux: Element = other as Element
-        return aux.name.toLowerCase() == this.name.toLowerCase()
+        return aux.title.toLowerCase() == this.title.toLowerCase()
+    }
+
+    override fun compareTo(other: Element): Int {
+        return this.title.compareTo(other.title)
     }
 }

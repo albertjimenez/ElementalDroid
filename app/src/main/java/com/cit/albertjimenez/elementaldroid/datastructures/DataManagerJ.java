@@ -1,5 +1,7 @@
 package com.cit.albertjimenez.elementaldroid.datastructures;
 
+import android.util.Log;
+
 import com.cit.albertjimenez.elementaldroid.dao.Element;
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser;
 import com.cit.albertjimenez.elementaldroid.dao.TeacherUser;
@@ -54,20 +56,37 @@ public class DataManagerJ implements Serializable {
 
     public void storeNewElement(Element element) {
         if (elementHashSet.add(element))
-            myRefElements.child(element.getName().toLowerCase()).setValue(element);
+            myRefElements.child(element.getTitle().toLowerCase()).setValue(element);
 
+    }
+
+    public void removeElementByUser(String email, Element element) {
+        Log.d("USERS-before", users.toString());
+        RegularUser regularUser = findUser(email);
+        if (regularUser != null) {
+            regularUser.getDiscoveredElements().remove(element);
+        }
+        Log.d("USERS-after", users.toString());
     }
 
     public void discoverElements() {
-        for (RegularUser r : users) {
-            if (r.getEmail().equals("al286423@uji.es")) {
-                r.getDiscoveredElements().add(new Element("Caca", "Pene", "---"));
-                r.getDiscoveredElements().add(new Element("Caca2", "Pene", "---"));
-                r.getDiscoveredElements().add(new Element("Caca3", "Pene", "---"));
+        for (RegularUser r : users)
+            if (r.getEmail().equals("al286423@uji.es"))
+                for (int i = 0; i < 20; i++)
+                    r.getDiscoveredElements().add(new Element("Element: " + i, "-", "---"));
 
-            }
-        }
+
     }
+
+    private RegularUser findUser(String email) {
+        for (RegularUser r : users)
+            if (r.getEmail().equals(email))
+                return r;
+        return null;
+
+
+    }
+
 
     public boolean isTeacher(TeacherUser teacherUser) {
         return teacherUsers.contains(teacherUser);
@@ -82,9 +101,9 @@ public class DataManagerJ implements Serializable {
 
     public LinkedList<Element> retrieveElementsByUser(String email) {
         for (RegularUser r : users) {
-            if (r.getEmail().equals(email)) {
+            if (r.getEmail().equals(email))
                 return r.getDiscoveredElements();
-            }
+
         }
         return new LinkedList<>();
     }

@@ -4,13 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import com.cit.albertjimenez.elementaldroid.barcode.BarcodeCaptureActivity
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.views.ReciclerAdapter
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
 import es.dmoral.toasty.Toasty
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.activity_list_elements.*
 
 class ListElements : AppCompatActivity() {
@@ -22,17 +23,17 @@ class ListElements : AppCompatActivity() {
         dataManagerFB.discoverElements()
         setContentView(R.layout.activity_list_elements)
         supportActionBar?.title = intent.getStringExtra("PROFILEUSERNAME")
+        val email = intent.getStringExtra("PROFILEEMAIL")
         //initialize ImageView
 //        Glide.with(this).load(intent.getStringExtra("PROFILEPHOTO")).into(profileUser)
-
         with(reciclerViewListItems) {
 
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
-            val list = dataManagerFB.
-                    retrieveElementsByUser(intent.getStringExtra("PROFILEEMAIL"))
-            Log.d("ELEMENTS on List", list.toString())
-            adapter = ReciclerAdapter(list)
+            val list = dataManagerFB.retrieveElementsByUser(email)
+            val myAdapter = ReciclerAdapter(list, email)
+            adapter = ScaleInAnimationAdapter(myAdapter)
+            itemAnimator = LandingAnimator()
         }
 
         fabAddElements.setOnClickListener {

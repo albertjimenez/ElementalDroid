@@ -8,21 +8,37 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputWikiElement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="67dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="408dp"
+                android:layout_height="match_parent"
+                android:hint="@string/hint_element" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/search_wiki_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="46dp"
+            android:contentDescription="@string/searching_elements_on_website"
+            app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
     </RelativeLayout>
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -38,7 +54,7 @@
     <include
         layout="@layout/content_teacher"
         android:layout_width="match_parent"
-        android:layout_height="416dp"
+        android:layout_height="match_parent"
         tools:layout_editor_absoluteY="243dp" />
 
 </android.support.design.widget.CoordinatorLayout>
