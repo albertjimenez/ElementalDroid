@@ -1,6 +1,7 @@
 package com.cit.albertjimenez.elementaldroid
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -8,9 +9,13 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.JsonReader
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import com.cit.albertjimenez.elementaldroid.dao.Element
-import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.firebase.auth.FirebaseAuth
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_teacher.*
 import java.io.InputStreamReader
@@ -21,16 +26,45 @@ import javax.net.ssl.HttpsURLConnection
 
 class TeacherActivity : AppCompatActivity() {
 
-    val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
+    //    val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
     val localesAPI = listOf<String>("https://en.wikipedia.org/api/rest_v1/page/summary/", "https://es.wikipedia.org/api/rest_v1/page/summary/")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
+        setSupportActionBar(toolbarTeacher)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         search_wiki_element.setOnClickListener { fetchApiWiki() }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.teacher_menu, menu);
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_settings) {
+            Welcome.mGoogleApiClient.connect()
+            Welcome.mGoogleApiClient.registerConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
+                override fun onConnected(p0: Bundle?) {
+                    FirebaseAuth.getInstance().signOut()
+                    Auth.GoogleSignInApi.signOut(Welcome.mGoogleApiClient).
+                            setResultCallback {
+                                startActivity(Intent(this@TeacherActivity, Welcome::class.java))
+                            }
+                }
+
+                override fun onConnectionSuspended(p0: Int) {
+                    Log.d("GAuth", "Suspended log")
+                }
+            })
+
+
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     fun parseJSONtoElement(jsonReader: JsonReader): Element {
         val strings = arrayListOf("title", "extract", "thumbnail")

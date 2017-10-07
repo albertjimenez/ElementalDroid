@@ -4,11 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.cit.albertjimenez.elementaldroid.barcode.BarcodeCaptureActivity
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.views.ReciclerAdapter
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.vision.barcode.Barcode
+import com.google.firebase.auth.FirebaseAuth
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.LandingAnimator
@@ -22,6 +28,7 @@ class ListElements : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         dataManagerFB.discoverElements()
         setContentView(R.layout.activity_list_elements)
+//        setSupportActionBar(toolbarListElements)
         supportActionBar?.title = intent.getStringExtra("PROFILEUSERNAME")
         val email = intent.getStringExtra("PROFILEEMAIL")
         //initialize ImageView
@@ -59,5 +66,33 @@ class ListElements : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         moveTaskToBack(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.listelements_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_settingsListElements) {
+            Welcome.mGoogleApiClient.connect()
+            Welcome.mGoogleApiClient.registerConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
+                override fun onConnected(p0: Bundle?) {
+                    FirebaseAuth.getInstance().signOut()
+                    Auth.GoogleSignInApi.signOut(Welcome.mGoogleApiClient).
+                            setResultCallback {
+                                startActivity(Intent(this@ListElements, Welcome::class.java))
+                            }
+                }
+
+                override fun onConnectionSuspended(p0: Int) {
+                    Log.d("GAuth", "Suspended log")
+                }
+            })
+
+
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

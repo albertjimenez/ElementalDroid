@@ -11,15 +11,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbarTeacher"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/inputWikiElement"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginTop="50dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="67dp">
 
             <android.support.design.widget.TextInputEditText
-                android:layout_width="408dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/hint_element" />
 
@@ -31,17 +46,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="46dp"
+            android:layout_marginTop="100dp"
             android:contentDescription="@string/searching_elements_on_website"
             app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
+
     </RelativeLayout>
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme">
-
-    </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -51,11 +60,5 @@
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimaryDark"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-    <include
-        layout="@layout/content_teacher"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteY="243dp" />
 
 </android.support.design.widget.CoordinatorLayout>

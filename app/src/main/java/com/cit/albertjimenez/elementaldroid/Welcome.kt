@@ -27,6 +27,11 @@ class Welcome : AppCompatActivity() {
     private val RC_SIGN_IN = 9001
     private var mAuth: FirebaseAuth? = null
     private val dataManagerFB = DataManagerJ.getInstance()
+
+    companion object {
+        lateinit var mGoogleApiClient: GoogleApiClient
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
@@ -39,7 +44,7 @@ class Welcome : AppCompatActivity() {
 
         // Lambda for avoid repeating code
         logo.setOnClickListener { logoInteraction() }
-        val mGoogleApiClient = auth(context = this, fragment = FragmentActivity(),
+        mGoogleApiClient = auth(context = this, fragment = FragmentActivity(),
                 token = getString(R.string.token))
         sign_in_button.setOnClickListener { signIn(mGoogleApiClient = mGoogleApiClient) }
         progressBar.visibility = View.GONE
@@ -102,6 +107,11 @@ class Welcome : AppCompatActivity() {
                         Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
 
                 }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
     }
 
 }
