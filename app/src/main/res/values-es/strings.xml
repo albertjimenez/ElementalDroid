@@ -9,4 +9,8 @@
     <string name="elements_found">Elementos encontrados:</string>
     <string name="hint_element">Escribe el nombre de un elemento</string>
     <string name="searching_elements_on_website">Buscar elementos en Internet</string>
+    <string name="rest_element_error">Elemento no encontrado</string>
+    <string name="action_settings">Cerrar sesión</string>
+    <string name="no_internet">No hay conexión a Internet</string>
+    <string name="empty_text">Texto vacío</string>
 </resources>

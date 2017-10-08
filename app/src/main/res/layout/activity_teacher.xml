@@ -29,7 +29,7 @@
             android:id="@+id/inputWikiElement"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="55dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="67dp">
 
@@ -39,6 +39,14 @@
                 android:hint="@string/hint_element" />
 
         </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/element_photo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/search_wiki_element"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp" />
 
         <ImageButton
             android:id="@+id/search_wiki_element"

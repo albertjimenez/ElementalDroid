@@ -12,4 +12,9 @@ data class Element(var title: String = "", var original: String = "", var extrac
     override fun compareTo(other: Element): Int {
         return this.title.compareTo(other.title)
     }
+
+    fun isEmpty(): Boolean {
+        return title == "" && original == "" && extract == ""
+    }
+
 }

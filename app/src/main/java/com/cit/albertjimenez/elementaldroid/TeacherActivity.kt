@@ -1,7 +1,7 @@
 package com.cit.albertjimenez.elementaldroid
 
 import android.content.Context
-import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -13,9 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import com.cit.albertjimenez.elementaldroid.dao.Element
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.firebase.auth.FirebaseAuth
+import com.cit.albertjimenez.elementaldroid.utils.logOutGoogle
+import com.cit.albertjimenez.elementaldroid.utils.snackbarMakeIt
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_teacher.*
 import java.io.InputStreamReader
@@ -27,55 +26,40 @@ import javax.net.ssl.HttpsURLConnection
 class TeacherActivity : AppCompatActivity() {
 
     //    val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
-    val localesAPI = listOf<String>("https://en.wikipedia.org/api/rest_v1/page/summary/", "https://es.wikipedia.org/api/rest_v1/page/summary/")
+    val localesAPI = listOf("https://en.wikipedia.org/api/rest_v1/page/summary/", "https://es.wikipedia.org/api/rest_v1/page/summary/")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
         setSupportActionBar(toolbarTeacher)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        search_wiki_element.setOnClickListener { fetchApiWiki() }
+        search_wiki_element.setOnClickListener {
+            fetchApiWiki()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.teacher_menu, menu);
-
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_settings) {
-            Welcome.mGoogleApiClient.connect()
-            Welcome.mGoogleApiClient.registerConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
-                override fun onConnected(p0: Bundle?) {
-                    FirebaseAuth.getInstance().signOut()
-                    Auth.GoogleSignInApi.signOut(Welcome.mGoogleApiClient).
-                            setResultCallback {
-                                startActivity(Intent(this@TeacherActivity, Welcome::class.java))
-                            }
-                }
+        if (item?.itemId == R.id.action_settings)
+            logOutGoogle(this, Welcome::class.java)
 
-                override fun onConnectionSuspended(p0: Int) {
-                    Log.d("GAuth", "Suspended log")
-                }
-            })
-
-
-        }
 
         return super.onOptionsItemSelected(item)
     }
 
     fun parseJSONtoElement(jsonReader: JsonReader): Element {
         val strings = arrayListOf("title", "extract", "thumbnail")
-        var myElement = Element()
-        var value: String = "-"
-        var desc: String = "-"
-        var photo: String = "-"
+        val myElement = Element()
+        var value = ""
+        var desc = ""
+        var photo = ""
         jsonReader.beginObject() // Start processing the JSON object
         while (jsonReader.hasNext()) { // Loop through all keys
             val key = jsonReader.nextName() // Fetch the next key
-            Log.d("JSON", key)
             if (key == strings[0]) {
                 value = jsonReader.nextString()
             } else if (key == strings[1]) {
@@ -97,10 +81,10 @@ class TeacherActivity : AppCompatActivity() {
     }
 
     fun parsePhoto(jsonReader: JsonReader): String {
-        var string = "--"
+        var string = ""
         jsonReader.beginObject() // Start processing the JSON object
         while (jsonReader.hasNext()) {
-            var key = jsonReader.nextName()
+            val key = jsonReader.nextName()
             if (key == "original")
                 string = jsonReader.nextString()
             else jsonReader.skipValue()
@@ -114,7 +98,8 @@ class TeacherActivity : AppCompatActivity() {
         val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
-        if (isConnected)
+        var elem: Element = Element()
+        if (isConnected && !inputWikiElement.editText?.text.isNullOrBlank())
             AsyncTask.execute({
                 var wikiElement: URL
                 if (Locale.getDefault().language != "es")
@@ -126,20 +111,25 @@ class TeacherActivity : AppCompatActivity() {
                     val responseBody = httpsURLConnection.inputStream
                     val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
                     val jsonReader = JsonReader(responseBodyReader)
-                    Log.d("ELEMENT WIKI", parseJSONtoElement(jsonReader).toString())
+                    elem = parseJSONtoElement(jsonReader)
+                    Log.d("ELEMENT WIKI", elem.toString())
+                    val url = URL(elem.original)
+                    val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                    runOnUiThread { element_photo.setImageBitmap(bmp) }
                 } else
                     runOnUiThread({ Toasty.error(this, getString(R.string.rest_element_error)).show() })
 
                 httpsURLConnection.disconnect()
             })
+        else if (inputWikiElement.editText?.text.isNullOrBlank())
+            snackbarMakeIt(teacherLayout, getString(R.string.empty_text), Snackbar.LENGTH_LONG)
         else runOnUiThread {
             if (teacherLayout != null) {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(teacherLayout.windowToken, 0)
+                snackbarMakeIt(teacherLayout, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
             }
-            Snackbar.make(teacherLayout, "No internet connection available", Snackbar.LENGTH_LONG).show()
         }
-
     }
 
 }

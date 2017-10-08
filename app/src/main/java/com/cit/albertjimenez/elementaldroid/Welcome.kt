@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser
 import com.cit.albertjimenez.elementaldroid.dao.TeacherUser
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.utils.auth
 import com.cit.albertjimenez.elementaldroid.utils.random
+import com.cit.albertjimenez.elementaldroid.utils.toastMakeIt
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.GoogleApiClient
@@ -104,7 +104,7 @@ class Welcome : AppCompatActivity() {
                         else
                             startActivity(Intent(myIntent))
                     } else
-                        Toast.makeText(applicationContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        toastMakeIt(applicationContext, "Authentication failed.")
 
                 }
     }
