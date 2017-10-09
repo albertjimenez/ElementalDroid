@@ -1,9 +1,7 @@
 package com.cit.albertjimenez.elementaldroid
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -12,11 +10,16 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.cit.albertjimenez.elementaldroid.dao.Element
+import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.utils.logOutGoogle
 import com.cit.albertjimenez.elementaldroid.utils.snackbarMakeIt
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_teacher.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.InputStreamReader
 import java.net.URL
 import java.util.*
@@ -25,7 +28,7 @@ import javax.net.ssl.HttpsURLConnection
 
 class TeacherActivity : AppCompatActivity() {
 
-    //    val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
+    val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
     val localesAPI = listOf("https://en.wikipedia.org/api/rest_v1/page/summary/", "https://es.wikipedia.org/api/rest_v1/page/summary/")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,8 +102,8 @@ class TeacherActivity : AppCompatActivity() {
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
         var elem: Element = Element()
-        if (isConnected && !inputWikiElement.editText?.text.isNullOrBlank())
-            AsyncTask.execute({
+        if (isConnected && !inputWikiElement.editText?.text.isNullOrBlank()) {
+            doAsync {
                 var wikiElement: URL
                 if (Locale.getDefault().language != "es")
                     wikiElement = URL(localesAPI[0] + inputWikiElement.editText?.text)
@@ -108,19 +111,21 @@ class TeacherActivity : AppCompatActivity() {
                     wikiElement = URL(localesAPI[1] + inputWikiElement.editText?.text)
                 val httpsURLConnection = wikiElement.openConnection() as HttpsURLConnection
                 if (httpsURLConnection.responseCode == 200) {
-                    val responseBody = httpsURLConnection.inputStream
-                    val responseBodyReader = InputStreamReader(responseBody, "UTF-8")
-                    val jsonReader = JsonReader(responseBodyReader)
+                    val jsonReader = JsonReader(InputStreamReader(httpsURLConnection.inputStream, "UTF-8"))
                     elem = parseJSONtoElement(jsonReader)
                     Log.d("ELEMENT WIKI", elem.toString())
-                    val url = URL(elem.original)
-                    val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    runOnUiThread { element_photo.setImageBitmap(bmp) }
+                    //When you've got the photo
+                    uiThread {
+                        Glide.with(this@TeacherActivity).load(elem.original).into(element_photo)
+                        dataManagerFB.storeNewElement(elem)
+                    }
+
                 } else
-                    runOnUiThread({ Toasty.error(this, getString(R.string.rest_element_error)).show() })
+                    uiThread { Toasty.error(applicationContext, getString(R.string.rest_element_error), Toast.LENGTH_SHORT).show() }
 
                 httpsURLConnection.disconnect()
-            })
+            }
+        }
         else if (inputWikiElement.editText?.text.isNullOrBlank())
             snackbarMakeIt(teacherLayout, getString(R.string.empty_text), Snackbar.LENGTH_LONG)
         else runOnUiThread {

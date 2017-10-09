@@ -55,7 +55,7 @@ public class DataManagerJ implements Serializable {
     }
 
     public void storeNewElement(Element element) {
-        if (elementHashSet.add(element))
+        if (element.getExtract().toLowerCase().contains("element") || element.getExtract().toLowerCase().contains("elemento") && elementHashSet.add(element))
             myRefElements.child(element.getTitle().toLowerCase()).setValue(element);
 
     }
