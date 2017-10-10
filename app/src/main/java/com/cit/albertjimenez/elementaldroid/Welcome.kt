@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_welcome.*
+import org.jetbrains.anko.startActivity
 import java.util.*
 
 
@@ -100,12 +101,11 @@ class Welcome : AppCompatActivity() {
                             putExtra("PROFILEEMAIL", user.email)
                         }
                         if (dataManagerFB.isTeacher(TeacherUser(user.displayName!!, user.email!!)))
-                            startActivity(Intent(this, TeacherActivity::class.java))
+                            startActivity<TeacherActivity>("PROFILEEMAIL" to user.email!!)
                         else
                             startActivity(Intent(myIntent))
                     } else
                         toastMakeIt(applicationContext, "Authentication failed.")
-
                 }
     }
 

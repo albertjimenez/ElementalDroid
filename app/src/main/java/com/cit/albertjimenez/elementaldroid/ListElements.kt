@@ -23,18 +23,13 @@ class ListElements : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataManagerFB.discoverElements()
         setContentView(R.layout.activity_list_elements)
-//        setSupportActionBar(toolbarListElements)
         supportActionBar?.title = intent.getStringExtra("PROFILEUSERNAME")
         val email = intent.getStringExtra("PROFILEEMAIL")
-        //initialize ImageView
-//        Glide.with(this).load(intent.getStringExtra("PROFILEPHOTO")).into(profileUser)
         with(reciclerViewListItems) {
-
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
-            val list = dataManagerFB.retrieveElementsByUser(email)
+            val list = dataManagerFB.mockretrieveElementsByUser(email)
             val myAdapter = ReciclerAdapter(list, email)
             adapter = ScaleInAnimationAdapter(myAdapter)
             itemAnimator = LandingAnimator()
@@ -51,10 +46,9 @@ class ListElements : AppCompatActivity() {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     val barcode = data.getParcelableExtra<Barcode>("Barcode")
-//                    val p = barcode.cornerPoints
                     Toasty.info(this, barcode.displayValue).show()
                 } else
-                    Toasty.error(this, "No QR code captured").show()
+                    Toasty.error(this, getString(R.string.no_qr_captured)).show()
             }
         } else
             super.onActivityResult(requestCode, resultCode, data)
@@ -73,8 +67,6 @@ class ListElements : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.action_settingsListElements)
             logOutGoogle(this, Welcome::class.java)
-
-
 
         return super.onOptionsItemSelected(item)
     }

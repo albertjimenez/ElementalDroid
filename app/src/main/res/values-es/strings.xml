@@ -13,4 +13,5 @@
     <string name="action_settings">Cerrar sesión</string>
     <string name="no_internet">No hay conexión a Internet</string>
     <string name="empty_text">Texto vacío</string>
+    <string name="no_qr_captured">No se ha detectado ningún código QR</string>
 </resources>

@@ -118,6 +118,8 @@ class TeacherActivity : AppCompatActivity() {
                     uiThread {
                         Glide.with(this@TeacherActivity).load(elem.original).into(element_photo)
                         dataManagerFB.storeNewElement(elem)
+                        element_name.text = elem.title
+                        element_desc.text = elem.extract
                     }
 
                 } else

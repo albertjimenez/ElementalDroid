@@ -69,15 +69,6 @@ public class DataManagerJ implements Serializable {
         Log.d("USERS-after", users.toString());
     }
 
-    public void discoverElements() {
-        for (RegularUser r : users)
-            if (r.getEmail().equals("al286423@uji.es"))
-                for (int i = 0; i < 20; i++)
-                    r.getDiscoveredElements().add(new Element("Element: " + i, "-", "---"));
-
-
-    }
-
     private RegularUser findUser(String email) {
         for (RegularUser r : users)
             if (r.getEmail().equals(email))
@@ -106,6 +97,13 @@ public class DataManagerJ implements Serializable {
 
         }
         return new LinkedList<>();
+    }
+
+    public LinkedList<Element> mockretrieveElementsByUser(String email) {
+        LinkedList<Element> list = new LinkedList<>();
+        for (int i = 0; i < 10; i++)
+            list.add(new Element("Element " + i, "-", ""));
+        return list;
     }
 
     public void initFB() {
