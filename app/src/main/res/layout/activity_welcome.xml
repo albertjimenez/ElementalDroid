@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="com.cit.albertjimenez.elementaldroid.Welcome">
 
     <LinearLayout
@@ -18,22 +19,36 @@
             style="@style/AppTheme.PopupOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@android:style/Theme.Black.NoTitleBar">
-
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="#FFFFFFFF"
                 android:elevation="8dp"
                 android:fontFamily="@font/lobster"
                 android:text="@string/welcome"
                 android:textAlignment="center"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </android.support.design.widget.AppBarLayout>
+                android:textStyle="bold"
+
+
+                android:shadowColor="#90FF00B4"
+                android:shadowDx="6"
+                android:shadowDy="6"
+                android:shadowRadius="5"
+                android:textColor="@color/dashboard_color"
+                android:textSize="44sp"
+                android:layout_height="0dp" />
+
+
+        <ToggleButton
+            android:id="@+id/animationsToggle"
+            style="@android:style/Widget.Holo.Light.Button.Toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/animations"
+            android:textOff="@string/no_animations"
+            android:textOn="@string/animations" />
 
         <ImageView
             android:id="@+id/logo"

@@ -14,4 +14,7 @@
     <string name="no_internet">No hay conexión a Internet</string>
     <string name="empty_text">Texto vacío</string>
     <string name="no_qr_captured">No se ha detectado ningún código QR</string>
+    <string name="query_hint">Escribe aquí para buscar</string>
+    <string name="animations">Animaciones</string>
+    <string name="no_animations">No animaciones</string>
 </resources>

@@ -28,6 +28,8 @@ class Welcome : AppCompatActivity() {
     private val RC_SIGN_IN = 9001
     private var mAuth: FirebaseAuth? = null
     private val dataManagerFB = DataManagerJ.getInstance()
+    private var animations = true
+
 
     companion object {
         lateinit var mGoogleApiClient: GoogleApiClient
@@ -41,7 +43,8 @@ class Welcome : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         HttpResponseCache.install(cacheDir, 100000L)
 
-        logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.move))
+        if (animations)
+            logo.startAnimation(AnimationUtils.loadAnimation(this, R.anim.move))
 
         // Lambda for avoid repeating code
         logo.setOnClickListener { logoInteraction() }
@@ -49,16 +52,19 @@ class Welcome : AppCompatActivity() {
                 token = getString(R.string.token))
         sign_in_button.setOnClickListener { signIn(mGoogleApiClient = mGoogleApiClient) }
         progressBar.visibility = View.GONE
+        //TODO poner en land
+        animationsToggle?.setOnCheckedChangeListener { _, p1 -> animations = p1 }
 
 
     }
 
     private fun logoInteraction() {
-        val animationList: ArrayList<Int> = arrayListOf(R.anim.blink, R.anim.bounce,
-                R.anim.fade_in, R.anim.fade_out, R.anim.move, R.anim.rotate, R.anim.slide_down,
-                R.anim.slide_up, R.anim.zoom_in, R.anim.zoom_out)
-        logo.startAnimation(AnimationUtils.loadAnimation(this, animationList[(0..animationList.size).random()]))
-
+        if (animations) {
+            val animationList: ArrayList<Int> = arrayListOf(R.anim.blink, R.anim.bounce,
+                    R.anim.fade_in, R.anim.fade_out, R.anim.move, R.anim.rotate, R.anim.slide_down,
+                    R.anim.slide_up, R.anim.zoom_in, R.anim.zoom_out)
+            logo.startAnimation(AnimationUtils.loadAnimation(this, animationList[(0..animationList.size).random()]))
+        }
     }
 
     //One line function for generate random number from a Range (Extension)

@@ -17,4 +17,11 @@ data class Element(var title: String = "", var original: String = "", var extrac
         return title == "" && original == "" && extract == ""
     }
 
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + original.hashCode()
+        result = 31 * result + extract.hashCode()
+        return result
+    }
+
 }

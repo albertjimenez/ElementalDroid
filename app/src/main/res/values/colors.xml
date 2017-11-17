@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#30369f</color>
     <color name="colorAccent">#ff5040</color>
     <color name="background_material_light">#afacac</color>
+    <color name="dashboard_color">#19e3f6</color>
+    <color name="create_color">#00F66C</color>
 </resources>
