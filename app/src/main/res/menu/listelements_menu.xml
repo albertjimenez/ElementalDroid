@@ -9,5 +9,12 @@
         android:title="@string/action_settings"
         android:icon="@drawable/common_full_open_on_phone"
         android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_brightness_seekbar"
+        android:title="@string/change_brightness"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:orderInCategory="100"
         app:showAsAction="never" />
+
 </menu>
