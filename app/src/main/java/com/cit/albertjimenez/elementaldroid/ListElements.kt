@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.transition.TransitionInflater
 import android.view.Menu
 import android.view.MenuItem
 import com.cit.albertjimenez.elementaldroid.barcode.BarcodeCaptureActivity
@@ -16,10 +17,11 @@ import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.activity_list_elements.*
+import org.jetbrains.anko.startActivity
 
 class ListElements : AppCompatActivity() {
 
-    val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
+    private val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +36,29 @@ class ListElements : AppCompatActivity() {
             adapter = ScaleInAnimationAdapter(myAdapter)
             itemAnimator = LandingAnimator()
         }
+        with(swipeContainer) {
+            setOnRefreshListener {
+                startActivity<AfterRefresh>()
+                isRefreshing = false
+            }
+            setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light)
 
+        }
         fabAddElements.setOnClickListener {
             val intent = Intent(applicationContext, BarcodeCaptureActivity::class.java)
             startActivityForResult(intent, 1)
         }
+        setupWindowAnimations()
     }
+
+    private fun setupWindowAnimations() {
+        val fade = TransitionInflater.from(this).inflateTransition(R.transition.activity_fade)
+        window.enterTransition = fade
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {

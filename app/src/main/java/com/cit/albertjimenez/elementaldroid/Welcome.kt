@@ -5,6 +5,7 @@ import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.transition.Slide
 import android.view.View
 import android.view.animation.AnimationUtils
 import com.cit.albertjimenez.elementaldroid.dao.RegularUser
@@ -54,8 +55,16 @@ class Welcome : AppCompatActivity() {
         progressBar.visibility = View.GONE
         //TODO poner en land
         animationsToggle?.setOnCheckedChangeListener { _, p1 -> animations = p1 }
+        setupWindowAnimations()
 
 
+    }
+
+
+    private fun setupWindowAnimations() {
+        val slide = Slide()
+        slide.duration = 1000
+        window.exitTransition = slide
     }
 
     private fun logoInteraction() {
