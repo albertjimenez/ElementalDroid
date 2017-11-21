@@ -10,17 +10,21 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import com.cit.albertjimenez.elementaldroid.barcode.BarcodeCaptureActivity
+import com.cit.albertjimenez.elementaldroid.dao.Element
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.utils.logOutGoogle
 import com.cit.albertjimenez.elementaldroid.views.ReciclerAdapter
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.barcode.Barcode
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import es.dmoral.toasty.Toasty
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.LandingAnimator
@@ -34,17 +38,20 @@ class ListElements : AppCompatActivity() {
     private lateinit var seekbarOnClick: SeekbarOnClick
     private var currentBrightness = 50
     private val requestPermission = 4
+    private lateinit var email: String
+    private lateinit var recyclerAdapter: ReciclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_elements)
         supportActionBar?.title = intent.getStringExtra("PROFILEUSERNAME")
-        val email = intent.getStringExtra("PROFILEEMAIL")
+        email = intent.getStringExtra("PROFILEEMAIL")
         with(reciclerViewListItems) {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
-            val list = dataManagerFB.mockretrieveElementsByUser(email)
+            val list = dataManagerFB.retrieveElementsByUser(email)
             val myAdapter = ReciclerAdapter(list, email)
+            recyclerAdapter = myAdapter
             adapter = ScaleInAnimationAdapter(myAdapter)
             itemAnimator = LandingAnimator()
         }
@@ -78,7 +85,19 @@ class ListElements : AppCompatActivity() {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     val barcode = data.getParcelableExtra<Barcode>("Barcode")
-                    Toasty.info(this, barcode.displayValue).show()
+                    try {
+                        val elementDiscovered = Gson().fromJson(barcode.displayValue, Element::class.java)
+                        Log.d("ELEMENTDISCOVERED", elementDiscovered.toString())
+                        if (dataManagerFB.discoverElementByUser(email, elementDiscovered)) {
+                            Toasty.success(this.applicationContext, "Element ${elementDiscovered.title} discovered!").show()
+                            recyclerAdapter.notifyDataSetChanged()
+                        } else
+                            Toasty.error(this.applicationContext, "Element ${elementDiscovered.title} already discovered!").show()
+
+                    } catch (e: JsonSyntaxException) {
+                        Toasty.error(this, getString(R.string.invalid_element)).show()
+                    }
+
                 } else
                     Toasty.error(this, getString(R.string.no_qr_captured)).show()
             }
@@ -167,3 +186,4 @@ class ListElements : AppCompatActivity() {
         }
     }
 }
+

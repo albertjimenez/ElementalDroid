@@ -109,7 +109,7 @@ class Welcome : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         val user = mAuth?.currentUser
                         val regularUser = RegularUser(user!!.displayName!!, user.email!!)
-                        dataManagerFB.storeNewUser(regularUser)
+//                        dataManagerFB.storeNewUser(regularUser)
                         val myIntent = with(Intent(this, ListElements::class.java)) {
                             putExtra("PROFILEPHOTO", user.photoUrl?.toString())
                             putExtra("PROFILEUSERNAME", user.displayName)

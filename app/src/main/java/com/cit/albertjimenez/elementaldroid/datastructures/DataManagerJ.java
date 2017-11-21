@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -35,6 +36,7 @@ public class DataManagerJ implements Serializable {
     public static final String profilesURL = "profile";
     public static final String elementsURL = "elements";
     public static final String teachersURL = "teachers";
+    public static final String childDiscoveredElements = "discoveredElements";
 
     //FirebaseDatabase
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -57,6 +59,19 @@ public class DataManagerJ implements Serializable {
     public void storeNewElement(Element element) {
         if (element.getExtract().toLowerCase().contains("element") || element.getExtract().toLowerCase().contains("elemento") && elementHashSet.add(element))
             myRefElements.child(element.getTitle().toLowerCase()).setValue(element);
+
+    }
+
+    public boolean discoverElementByUser(String email, Element element) {
+        ArrayList<Element> linkedList = retrieveElementsByUser(email);
+
+        if (!linkedList.contains(element)) {
+            linkedList.add(element);
+            myRefUsers.child(replaceDots(email)).child(childDiscoveredElements).setValue(linkedList);
+            return true;
+        }
+        return false;
+
 
     }
 
@@ -84,19 +99,22 @@ public class DataManagerJ implements Serializable {
     }
 
     public void storeNewUser(RegularUser user) {
-        if (users.add(user))
+        if (!users.contains(user)) {
+            users.add(user);
             myRefUsers.child(replaceDots(user.getEmail())).setValue(user);
+
+        }
 
     }
 
 
-    public LinkedList<Element> retrieveElementsByUser(String email) {
+    public ArrayList<Element> retrieveElementsByUser(String email) {
         for (RegularUser r : users) {
             if (r.getEmail().equals(email))
                 return r.getDiscoveredElements();
 
         }
-        return new LinkedList<>();
+        return new ArrayList<>();
     }
 
     public LinkedList<Element> mockretrieveElementsByUser(String email) {
@@ -111,7 +129,7 @@ public class DataManagerJ implements Serializable {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 RegularUser user = dataSnapshot.getValue(RegularUser.class);
-                users.add(user);
+                storeNewUser(user);
 
             }
 
