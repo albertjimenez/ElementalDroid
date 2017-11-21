@@ -17,4 +17,10 @@
     <string name="query_hint">Escribe aquí para buscar</string>
     <string name="animations">Animaciones</string>
     <string name="no_animations">No animaciones</string>
+    <string name="sketch_a_draw">Pinta un dibujo</string>
+    <string name="choose_brightness">Escoge el brillo</string>
+    <string name="change_brightness">Cambiar brillo</string>
+    <string name="just_animations">Animaciones!</string>
+    <string name="copy">Copiar</string>
+    <string name="select_action">Selecciona la acción</string>
 </resources>

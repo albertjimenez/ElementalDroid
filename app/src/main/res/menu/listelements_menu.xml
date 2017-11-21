@@ -16,5 +16,10 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_paint"
+        android:title="@string/sketch_a_draw"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 
 </menu>

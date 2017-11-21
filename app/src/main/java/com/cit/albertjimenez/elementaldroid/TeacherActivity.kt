@@ -3,12 +3,15 @@ package com.cit.albertjimenez.elementaldroid
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.provider.Settings
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.JsonReader
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
+import android.widget.SeekBar
 import android.widget.Toast
 import com.cit.albertjimenez.elementaldroid.dao.Element
 import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
@@ -28,6 +31,9 @@ class TeacherActivity : AppCompatActivity() {
 
     private val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
     private val localesAPI = listOf("https://en.wikipedia.org/api/rest_v1/page/summary/", "https://es.wikipedia.org/api/rest_v1/page/summary/")
+    private lateinit var seekbarOnClick: ListElements.SeekbarOnClick
+    private var currentBrightness = 50
+    private val requestPermission = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,26 @@ class TeacherActivity : AppCompatActivity() {
         if (item?.itemId == R.id.action_settings)
             logOutGoogle(this, Welcome::class.java)
 
+        if (item?.itemId == R.id.action_paint)
+            startActivity<DrawingActivity>()
+        else {
+            currentBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+            val alertDialog = AlertDialog.Builder(this)
+            val seekBar = SeekBar(this)
+
+            with(seekBar) {
+                max = 255
+                keyProgressIncrement = 1
+                seekbarOnClick = ListElements.SeekbarOnClick(cr = contentResolver, window = window)
+                setOnSeekBarChangeListener(seekbarOnClick)
+            }
+            with(alertDialog) {
+                setIcon(android.R.drawable.btn_star_big_on)
+                setView(seekBar)
+                setTitle(getString(R.string.choose_brightness))
+                show()
+            }
+        }
 
         return super.onOptionsItemSelected(item)
     }

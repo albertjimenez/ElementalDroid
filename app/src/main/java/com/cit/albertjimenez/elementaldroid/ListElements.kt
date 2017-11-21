@@ -99,8 +99,9 @@ class ListElements : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.action_settingsListElements)
             logOutGoogle(this, Welcome::class.java)
+        if (item?.itemId == R.id.action_paint)
+            startActivity<DrawingActivity>()
         else {
-
             currentBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
             val alertDialog = AlertDialog.Builder(this)
             val seekBar = SeekBar(this)
@@ -138,7 +139,7 @@ class ListElements : AppCompatActivity() {
             permissions()
     }
 
-    private class SeekbarOnClick(private var brightness: Int = 50, cr: ContentResolver, window: Window) : OnSeekBarChangeListener {
+    class SeekbarOnClick(private var brightness: Int = 50, cr: ContentResolver, window: Window) : OnSeekBarChangeListener {
 
         private var window: Window? = window
         private var cResolver: ContentResolver? = cr
