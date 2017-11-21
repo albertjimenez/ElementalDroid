@@ -35,7 +35,16 @@
             android:label="@string/title_activity_teacher"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AfterRefresh" />
-        <activity android:name=".DrawingActivity"></activity>
+        <activity android:name=".DrawingActivity" />
+        <activity
+            android:name=".ViewItemActivity"
+            android:label="@string/title_activity_view_item"
+            android:parentActivityName=".ListElements"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cit.albertjimenez.elementaldroid.ListElements" />
+        </activity>
     </application>
 
 </manifest>

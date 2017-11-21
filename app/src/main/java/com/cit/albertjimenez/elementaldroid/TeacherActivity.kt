@@ -27,6 +27,7 @@ import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
+
 class TeacherActivity : AppCompatActivity() {
 
     private val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
@@ -34,6 +35,8 @@ class TeacherActivity : AppCompatActivity() {
     private lateinit var seekbarOnClick: ListElements.SeekbarOnClick
     private var currentBrightness = 50
     private val requestPermission = 4
+    private val SAVEDINSTANCENAMES = listOf("NAME", "DESCRIPTION", "PHOTO")
+    private var photoURL = "--"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +65,7 @@ class TeacherActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_settings)
+        if (item?.itemId == R.id.action_signout)
             logOutGoogle(this, Welcome::class.java)
 
         if (item?.itemId == R.id.action_paint)
@@ -112,6 +115,7 @@ class TeacherActivity : AppCompatActivity() {
             title = value
             extract = desc
             original = photo
+            photoURL = original
         }
         jsonReader.endObject()
         jsonReader.close()
@@ -165,5 +169,27 @@ class TeacherActivity : AppCompatActivity() {
         }
 
     }
-//TODO save the query into the bundle
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.let {
+            with(outState) {
+                putString(SAVEDINSTANCENAMES[0], element_name.text.toString())
+                putString(SAVEDINSTANCENAMES[1], element_desc.text.toString())
+                putString(SAVEDINSTANCENAMES[2], photoURL)
+            }
+        }
+
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState?.let {
+            with(savedInstanceState) {
+                element_name.text = getString(SAVEDINSTANCENAMES[0])
+                element_desc.text = getString(SAVEDINSTANCENAMES[1])
+                Picasso.with(applicationContext).load(getString(SAVEDINSTANCENAMES[2])).fit().centerCrop().into(element_photo)
+            }
+        }
+    }
 }

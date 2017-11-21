@@ -10,28 +10,30 @@ import android.widget.TextView
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.cit.albertjimenez.elementaldroid.R
+import com.cit.albertjimenez.elementaldroid.ViewItemActivity
 import com.cit.albertjimenez.elementaldroid.dao.Element
-import com.cit.albertjimenez.elementaldroid.datastructures.DataManagerJ
 import com.cit.albertjimenez.elementaldroid.utils.initialLetter
 import es.dmoral.toasty.Toasty
+import org.jetbrains.anko.startActivity
 
 
 class ReciclerAdapter(val names: MutableList<Element>, val email: String) : RecyclerView.Adapter<ReciclerAdapter.MyViewHolder>() {
 
-    private var dataManager: DataManagerJ = DataManagerJ.getInstance()
     private var generator = ColorGenerator.MATERIAL
 
     override fun onBindViewHolder(holder: MyViewHolder?, position: Int) {
 
-        with(holder!!) {
-            title.text = names[position].title
-            letterMaterial.setImageDrawable(TextDrawable.builder()
-                    .buildRound(names[position].title.initialLetter(), generator.randomColor))
-            itemView.setOnClickListener {
-                Toasty.info(holder.view.context, "Removed" +
-                        names[position].title + " position  $position").show()
-//                dataManager.removeElementByUser(email, names[position])
-//                notifyItemRemoved(position)
+        holder?.let {
+            with(holder) {
+                if (names.isNotEmpty()) {
+                    title.text = names[position].title
+                    letterMaterial.setImageDrawable(TextDrawable.builder()
+                            .buildRound(names[position].title.initialLetter(), generator.randomColor))
+                    itemView.setOnClickListener {
+                        holder.view.context.startActivity<ViewItemActivity>("element" to names[position], "email" to email)
+                    }
+
+                }
             }
         }
 

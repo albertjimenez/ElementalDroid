@@ -56,6 +56,13 @@ public class DataManagerJ implements Serializable {
         return dataManagerJ;
     }
 
+    public RegularUser retrieveUser(String email) {
+        for (RegularUser r : users)
+            if (r.getEmail().equals(email))
+                return r;
+        return null;
+    }
+
     public void storeNewElement(Element element) {
         if (element.getExtract().toLowerCase().contains("element") || element.getExtract().toLowerCase().contains("elemento") && elementHashSet.add(element))
             myRefElements.child(element.getTitle().toLowerCase()).setValue(element);

@@ -41,11 +41,23 @@ class ListElements : AppCompatActivity() {
     private lateinit var email: String
     private lateinit var recyclerAdapter: ReciclerAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_elements)
-        supportActionBar?.title = intent.getStringExtra("PROFILEUSERNAME")
-        email = intent.getStringExtra("PROFILEEMAIL")
+        intent.getStringExtra("PROFILEUSERNAME")?.let {
+
+            supportActionBar?.title = if (it.isNullOrBlank())
+                ViewItemActivity.user.name
+            else
+                it
+        }
+        intent.getStringExtra("PROFILEEMAIL").let {
+            email = if (it.isNullOrBlank())
+                ViewItemActivity.user.email
+            else
+                it
+        }
         with(reciclerViewListItems) {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
@@ -185,5 +197,7 @@ class ListElements : AppCompatActivity() {
             window!!.attributes = layoutpars
         }
     }
+
+
 }
 
