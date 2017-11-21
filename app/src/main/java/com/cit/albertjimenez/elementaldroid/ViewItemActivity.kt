@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_view_item.*
 import kotlinx.android.synthetic.main.content_view_item.*
+import org.jetbrains.anko.share
 
 class ViewItemActivity : AppCompatActivity() {
 
@@ -28,11 +29,11 @@ class ViewItemActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar_layout.setExpandedTitleColor(Color.BLACK)
         toolbar_layout.setCollapsedTitleTextColor(Color.BLACK)
-        val element: Element? = intent.getSerializableExtra("element") as Element
-        supportActionBar?.title = element?.title
-        element_view_description.text = element?.extract
+        val element: Element = intent.getSerializableExtra("element") as Element
+        supportActionBar?.title = element.title
+        element_view_description.text = element.extract
         val imageView = ImageView(this)
-        Picasso.with(this).load(element?.original).into(imageView, object : Callback {
+        Picasso.with(this).load(element.original).into(imageView, object : Callback {
             override fun onSuccess() {
                 toolbar_layout.background = imageView.drawable
             }
@@ -42,5 +43,10 @@ class ViewItemActivity : AppCompatActivity() {
             }
         })
         user = dataManager.retrieveUser(intent.getStringExtra("email"))
+
+        shareText.setOnClickListener {
+            val str = "${element.title}\n${element.extract}"
+            share(str)
+        }
     }
 }
