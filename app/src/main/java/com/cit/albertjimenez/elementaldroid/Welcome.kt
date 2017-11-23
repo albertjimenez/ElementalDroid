@@ -53,7 +53,6 @@ class Welcome : AppCompatActivity() {
                 token = getString(R.string.token))
         sign_in_button.setOnClickListener { signIn(mGoogleApiClient = mGoogleApiClient) }
         progressBar.visibility = View.GONE
-        //TODO poner en land
         animationsToggle?.setOnCheckedChangeListener { _, p1 -> animations = p1 }
         setupWindowAnimations()
 

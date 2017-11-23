@@ -27,6 +27,7 @@ class ReciclerAdapter(val names: MutableList<Element>, val email: String) : Recy
             with(holder) {
                 if (names.isNotEmpty()) {
                     title.text = names[position].title
+                    subtitle.text = names[position].extract
                     letterMaterial.setImageDrawable(TextDrawable.builder()
                             .buildRound(names[position].title.initialLetter(), generator.randomColor))
                     itemView.setOnClickListener {
@@ -53,6 +54,7 @@ class ReciclerAdapter(val names: MutableList<Element>, val email: String) : Recy
         constructor(view: View) : super(view) {
             this.view = view
             this.title = view.findViewById(R.id.element_name)
+            this.subtitle = view.findViewById(R.id.element_subtext)
             this.letterMaterial = view.findViewById(R.id.letter)
             view.setOnCreateContextMenuListener(this)
         }
@@ -67,5 +69,6 @@ class ReciclerAdapter(val names: MutableList<Element>, val email: String) : Recy
 
         val title: TextView
         val letterMaterial: ImageView
+        val subtitle: TextView
     }
 }

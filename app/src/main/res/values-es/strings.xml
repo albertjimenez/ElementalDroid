@@ -23,4 +23,7 @@
     <string name="just_animations">Animaciones!</string>
     <string name="copy">Copiar</string>
     <string name="select_action">Selecciona la acción</string>
+    <string name="action_signout">Cerrar sesión</string>
+    <string name="invalid_element">Elemento Inválido</string>
+    <string name="load_image_error">No se pudo cargar la imagen, comprueba tu conexión a Internet</string>
 </resources>

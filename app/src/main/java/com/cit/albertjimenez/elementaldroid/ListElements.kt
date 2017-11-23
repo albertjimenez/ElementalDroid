@@ -128,26 +128,26 @@ class ListElements : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_settingsListElements)
-            logOutGoogle(this, Welcome::class.java)
-        if (item?.itemId == R.id.action_paint)
-            startActivity<DrawingActivity>()
-        else {
-            currentBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
-            val alertDialog = AlertDialog.Builder(this)
-            val seekBar = SeekBar(this)
+        when {
+            item?.itemId == R.id.action_settingsListElements -> logOutGoogle(this, Welcome::class.java)
+            item?.itemId == R.id.action_paint -> startActivity<DrawingActivity>()
+            item?.itemId == R.id.action_brightness_seekbar -> {
+                currentBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+                val alertDialog = AlertDialog.Builder(this)
+                val seekBar = SeekBar(this)
 
-            with(seekBar) {
-                max = 255
-                keyProgressIncrement = 1
-                seekbarOnClick = SeekbarOnClick(cr = contentResolver, window = window)
-                setOnSeekBarChangeListener(seekbarOnClick)
-            }
-            with(alertDialog) {
-                setIcon(android.R.drawable.btn_star_big_on)
-                setView(seekBar)
-                setTitle(getString(R.string.choose_brightness))
-                show()
+                with(seekBar) {
+                    max = 255
+                    keyProgressIncrement = 1
+                    seekbarOnClick = SeekbarOnClick(cr = contentResolver, window = window)
+                    setOnSeekBarChangeListener(seekbarOnClick)
+                }
+                with(alertDialog) {
+                    setIcon(android.R.drawable.btn_star_big_on)
+                    setView(seekBar)
+                    setTitle(getString(R.string.choose_brightness))
+                    show()
+                }
             }
         }
 

@@ -43,19 +43,20 @@ class TeacherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_teacher)
         setSupportActionBar(toolbarTeacher)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        searchView.isIconified = false
-        searchView.queryHint = getString(R.string.query_hint)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                if (p0.isNullOrBlank())
-                    fetchApiWiki()
-                else
-                    fetchApiWiki(p0!!)
-                return true
-            }
 
-            override fun onQueryTextChange(p0: String?): Boolean = true
-        })
+        with(searchView) {
+            isIconified = false
+            queryHint = getString(R.string.query_hint)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    p0?.let { fetchApiWiki(p0) }
+
+                    return true
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean = true
+            })
+        }
         fab.setOnClickListener { startActivity<TeacherActivity>() }
     }
 
