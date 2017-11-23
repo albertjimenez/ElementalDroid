@@ -29,7 +29,9 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".ListElements" />
-        <activity android:name=".barcode.BarcodeCaptureActivity" />
+        <activity
+            android:name=".barcode.BarcodeCaptureActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".TeacherActivity"
             android:label="@string/title_activity_teacher"

@@ -9,6 +9,10 @@
     <com.cit.albertjimenez.elementaldroid.camera.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"></com.cit.albertjimenez.elementaldroid.camera.CameraSourcePreview>
+        android:layout_height="531dp"
+        android:layout_weight="1">
+
+    </com.cit.albertjimenez.elementaldroid.camera.CameraSourcePreview>
+
+
 </LinearLayout>

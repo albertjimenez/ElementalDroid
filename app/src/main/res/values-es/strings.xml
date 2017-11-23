@@ -26,4 +26,5 @@
     <string name="action_signout">Cerrar sesión</string>
     <string name="invalid_element">Elemento Inválido</string>
     <string name="load_image_error">No se pudo cargar la imagen, comprueba tu conexión a Internet</string>
+    <string name="scan_instructions">Por favor escanea el código QR proporcionado por el profesor</string>
 </resources>

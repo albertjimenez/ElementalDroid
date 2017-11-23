@@ -34,6 +34,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.cit.albertjimenez.elementaldroid.R;
@@ -47,6 +48,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+
+import es.dmoral.toasty.Toasty;
 
 public final class BarcodeCaptureActivity extends AppCompatActivity
         implements BarcodeTracker.BarcodeGraphicTrackerCallback {
@@ -72,11 +75,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.barcode_capture);
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-
+        mPreview = findViewById(R.id.preview);
+        Toasty.info(this, getString(R.string.scan_instructions), Toast.LENGTH_LONG).show();
         boolean autoFocus = true;
         boolean useFlash = false;
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
