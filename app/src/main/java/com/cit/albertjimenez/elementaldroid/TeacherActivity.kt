@@ -31,7 +31,8 @@ import javax.net.ssl.HttpsURLConnection
 class TeacherActivity : AppCompatActivity() {
 
     private val dataManagerFB: DataManagerJ = DataManagerJ.getInstance()
-    private val localesAPI = listOf("https://en.wikipedia.org/api/rest_v1/page/summary/", "https://es.wikipedia.org/api/rest_v1/page/summary/")
+    private val localesAPI = listOf("https://en.wikipedia.org/api/rest_v1/page/summary/",
+            "https://es.wikipedia.org/api/rest_v1/page/summary/")
     private lateinit var seekbarOnClick: ListElements.SeekbarOnClick
     private var currentBrightness = 50
     private val requestPermission = 4
@@ -44,19 +45,22 @@ class TeacherActivity : AppCompatActivity() {
         setSupportActionBar(toolbarTeacher)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        //Searchview for querying into wikipedia database
         with(searchView) {
             isIconified = false
             queryHint = getString(R.string.query_hint)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(p0: String?): Boolean {
-                    p0?.let { fetchApiWiki(p0) }
 
+                    //Just execute the function if p0 is not null
+                    p0?.let { fetchApiWiki(p0) }
                     return true
                 }
 
                 override fun onQueryTextChange(p0: String?): Boolean = true
             })
         }
+        //Defined lambda action listener
         fab.setOnClickListener { startActivity<TeacherActivity>() }
     }
 
@@ -65,6 +69,13 @@ class TeacherActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    /**
+     * 3 elements are available for the user.
+     * The first one is for signing out of the GAccount
+     * The second one for drawing a picture with a canvas
+     * The last one for modifying the brightness of the app with a seekbar
+     *
+     */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.action_signout)
             logOutGoogle(this, Welcome::class.java)
@@ -93,6 +104,11 @@ class TeacherActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * @param Uses JsonReader for converting to an Element
+     *
+     * @return An Element with data or empty Element if the JSON is not valid
+     */
     fun parseJSONtoElement(jsonReader: JsonReader): Element {
         val strings = arrayListOf("title", "extract", "thumbnail")
         val myElement = Element()
@@ -123,6 +139,9 @@ class TeacherActivity : AppCompatActivity() {
         return myElement
     }
 
+    /**
+     *  Parse the photo of the JSON request on other thread and return the URL
+     */
     fun parsePhoto(jsonReader: JsonReader): String {
         var string = ""
         jsonReader.beginObject() // Start processing the JSON object
@@ -137,12 +156,17 @@ class TeacherActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Based on the language on the device, it will go with a spanish or english version
+     * of Wikipedia database
+     */
     fun fetchApiWiki(query: String = "") {
         val cm = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
         var elem: Element
         if (isConnected && !query.isBlank()) {
+            //Doing Async task on the background
             doAsync {
                 var wikiElement: URL
                 if (Locale.getDefault().language != "es")
@@ -154,7 +178,8 @@ class TeacherActivity : AppCompatActivity() {
                     val jsonReader = JsonReader(InputStreamReader(httpsURLConnection.inputStream, "UTF-8"))
                     elem = parseJSONtoElement(jsonReader)
                     Log.d("ELEMENT WIKI", elem.toString())
-                    //When you've got the photo
+                    //When you've got the photo, uiThread takes the values and execute the code
+                    //on the main thread
                     uiThread {
                         dataManagerFB.storeNewElement(elem)
                         element_name.text = elem.title
