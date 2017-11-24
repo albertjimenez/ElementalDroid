@@ -77,27 +77,26 @@ class TeacherActivity : AppCompatActivity() {
      *
      */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_signout)
-            logOutGoogle(this, Welcome::class.java)
+        when (item?.itemId) {
+            R.id.action_signout -> logOutGoogle(this, Welcome::class.java)
+            R.id.action_paint -> startActivity<DrawingActivity>()
+            R.id.action_brightness_seekbar -> {
+                currentBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+                val alertDialog = AlertDialog.Builder(this)
+                val seekBar = SeekBar(this)
 
-        if (item?.itemId == R.id.action_paint)
-            startActivity<DrawingActivity>()
-        else {
-            currentBrightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS)
-            val alertDialog = AlertDialog.Builder(this)
-            val seekBar = SeekBar(this)
-
-            with(seekBar) {
-                max = 255
-                keyProgressIncrement = 1
-                seekbarOnClick = ListElements.SeekbarOnClick(cr = contentResolver, window = window)
-                setOnSeekBarChangeListener(seekbarOnClick)
-            }
-            with(alertDialog) {
-                setIcon(android.R.drawable.btn_star_big_on)
-                setView(seekBar)
-                setTitle(getString(R.string.choose_brightness))
-                show()
+                with(seekBar) {
+                    max = 255
+                    keyProgressIncrement = 1
+                    seekbarOnClick = ListElements.SeekbarOnClick(cr = contentResolver, window = window)
+                    setOnSeekBarChangeListener(seekbarOnClick)
+                }
+                with(alertDialog) {
+                    setIcon(android.R.drawable.btn_star_big_on)
+                    setView(seekBar)
+                    setTitle(getString(R.string.choose_brightness))
+                    show()
+                }
             }
         }
 
@@ -109,7 +108,7 @@ class TeacherActivity : AppCompatActivity() {
      *
      * @return An Element with data or empty Element if the JSON is not valid
      */
-    fun parseJSONtoElement(jsonReader: JsonReader): Element {
+    private fun parseJSONtoElement(jsonReader: JsonReader): Element {
         val strings = arrayListOf("title", "extract", "thumbnail")
         val myElement = Element()
         var value = ""
@@ -118,14 +117,12 @@ class TeacherActivity : AppCompatActivity() {
         jsonReader.beginObject() // Start processing the JSON object
         while (jsonReader.hasNext()) { // Loop through all keys
             val key = jsonReader.nextName() // Fetch the next key
-            if (key == strings[0]) {
-                value = jsonReader.nextString()
-            } else if (key == strings[1]) {
-                desc = jsonReader.nextString()
-            } else if (key == strings[2])
-                photo = parsePhoto(jsonReader)
-            else
-                jsonReader.skipValue() // Skip values of other keys
+            when (key) {
+                strings[0] -> value = jsonReader.nextString()
+                strings[1] -> desc = jsonReader.nextString()
+                strings[2] -> photo = parsePhoto(jsonReader)
+                else -> jsonReader.skipValue()
+            } // Skip values of other keys
 
         }
         with(myElement) {
@@ -142,7 +139,7 @@ class TeacherActivity : AppCompatActivity() {
     /**
      *  Parse the photo of the JSON request on other thread and return the URL
      */
-    fun parsePhoto(jsonReader: JsonReader): String {
+    private fun parsePhoto(jsonReader: JsonReader): String {
         var string = ""
         jsonReader.beginObject() // Start processing the JSON object
         while (jsonReader.hasNext()) {
@@ -184,7 +181,8 @@ class TeacherActivity : AppCompatActivity() {
                         dataManagerFB.storeNewElement(elem)
                         element_name.text = elem.title
                         element_desc.text = elem.extract
-                        Picasso.with(applicationContext).load(elem.original).fit().centerCrop().into(element_photo)
+                        if (elem.original.isNotEmpty())
+                            Picasso.with(applicationContext).load(elem.original).fit().centerCrop().into(element_photo)
                     }
 
                 } else
